@@ -1,8 +1,8 @@
 package main
 
 import (
+	"fmt"
 	"net"
-	"os"
 	"strconv"
 	"sync"
 	"time"
@@ -17,20 +17,18 @@ func main() {
 	BoldYellow := color.New(color.FgYellow).Add(color.Bold).PrintFunc()
 
 	BoldUnderlinedMagenta("Simple Port Scanner With Go-Lang")
-	if len(os.Args) < 2 {
-		color.Red("Missing target parameter")
-		os.Exit(0)
-	} else {
-		ItalicCyan("Target : ")
-		color.Red(os.Args[1])
-	}
+
+	var UserInput string
+	ItalicCyan("Enter your URL/IP address: ")
+	fmt.Scan(&UserInput)
+
 	var wg sync.WaitGroup
 	now := time.Now()
 	for port := 1; port <= 1024; port++ {
 		wg.Add(1)
 		go func(port int) {
 			defer wg.Done()
-			address := os.Args[1] + ":" + strconv.Itoa(port)
+			address := UserInput + ":" + strconv.Itoa(port)
 			conn, err := net.DialTimeout("tcp", address, time.Millisecond*40)
 			if err != nil {
 				return
